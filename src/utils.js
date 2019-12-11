@@ -1,6 +1,6 @@
 const path = require('path');
 const fse = require('fs-extra');
-const { INJECT_FILES } = require('./constants');
+const { INJECT_FILES, TEMPLATE_GIT_REPO } = require('./constants');
 
 function getRootPath() {
   return path.resolve(__dirname, './..');
@@ -12,7 +12,7 @@ function getPackageVersion() {
 }
 
 function logPackageVersion() {
-  const msg = `zero-cli version: ${getPackageVersion()}`;
+  const msg = `Amazing！x-vue-cli version: ${getPackageVersion()}`;
   console.log();
   console.log(msg);
   console.log();
@@ -34,3 +34,8 @@ function getDirFileName(dir) {
   }
 }
 exports.getDirFileName = getDirFileName;
+
+function getGitTplUrl(domain) {
+  return TEMPLATE_GIT_REPO.replace('github', `github.${domain}`);
+}
+exports.getGitTplUrl = getGitTplUrl;

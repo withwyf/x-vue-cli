@@ -8,12 +8,14 @@ const path = require('path');
 const memFs = require('mem-fs');
 const editor = require('mem-fs-editor');
 const { getDirFileName } = require('./utils');
+const { getGitTplUrl } = require('./utils');
 const { exec } = require('child_process');
 
 function Project(options) {
   this.config = Object.assign({
     projectName: '',
-    description: ''
+    description: '',
+    domain: '',
   }, options);
   const store = memFs.create();
   this.memFsEditor = editor.create(store);
@@ -29,7 +31,7 @@ Project.prototype.create = function() {
 
 Project.prototype.inquire = function() {
   const prompts = [];
-  const { projectName, description } = this.config;
+  const { projectName, description, domain } = this.config;
   if (typeof projectName !== 'string') {
     prompts.push({
       type: 'input',
@@ -37,7 +39,7 @@ Project.prototype.inquire = function() {
       message: '请输入项目名：',
       validate(input) {
         if (!input) {
-          return '项目名不能为空';
+          return 'Please input Project Name';
         }
         if (fse.existsSync(input)) {
           return '当前目录已存在同名项目，请更换项目名';
@@ -66,8 +68,16 @@ Project.prototype.inquire = function() {
     prompts.push({
       type: 'input',
       name: 'description',
-      message: '请输入项目描述'
+      message: 'Please input desc'
     });
+  }
+
+  if (typeof domain !== 'string') {
+      prompts.push({
+        type: 'input',
+        name: 'domain',
+        message: 'Please input domain'
+      });
   }
 
   return inquirer.prompt(prompts);
@@ -88,12 +98,13 @@ Project.prototype.injectTemplate = function(source, dest, data) {
 }
 
 Project.prototype.generate = function() {
-  const { projectName, description } = this.config;
+  const { projectName, description, domain } = this.config;
   const projectPath = path.join(process.cwd(), projectName);
   const downloadPath = path.join(projectPath, '__download__');
   // projectPath = projectName/
   // downloadPath = projectName/__download__
-  
+  const GIT_TEMPLATE_REPO = getGitTplUrl(domain);
+  console.log(chalk.green(`Download From URL: ${GIT_TEMPLATE_REPO}`));
   const downloadSpinner = ora('正在下载模板，请稍等...');
   downloadSpinner.start();
   // 下载git repo
@@ -108,7 +119,6 @@ Project.prototype.generate = function() {
     downloadSpinner.succeed('下载成功');
 
     // 复制文件
-    console.log();
     const copyFiles = getDirFileName(downloadPath);
 
     copyFiles.forEach((file) => {
