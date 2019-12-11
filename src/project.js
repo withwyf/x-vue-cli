@@ -52,7 +52,7 @@ Project.prototype.inquire = function() {
       message: '当前目录已存在同名项目，请更换项目名',
       validate(input) {
         if (!input) {
-          return '项目名不能为空';
+          return 'Project Name can not be empty';
         }
         if (fse.existsSync(input)) {
           return '当前目录已存在同名项目，请更换项目名';
@@ -163,8 +163,8 @@ Project.prototype.generate = function() {
             console.log(`${stderr}${stdout}`);
 
             console.log();
-            console.log(chalk.green('创建项目成功！'));
-            console.log(chalk.green('Let\'s Coding吧！嘿嘿😝'));
+            console.log(chalk.green('Create Project Success ！'));
+            console.log(chalk.green('Enjoy your Coding ! Wow !'));
           }
         })
       })

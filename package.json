@@ -4,7 +4,7 @@
   "description": "a vue cli",
   "main": "index.js",
   "bin": {
-    "x-vue-cli": "x-vue.js"
+    "x-vue-cli": "bin/x-vue"
   },
   "dependencies": {
     "chalk": "^2.4.2",
