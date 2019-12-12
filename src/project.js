@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const fse = require('fs-extra');
 const download = require('download-git-repo');
-const { TEMPLATE_GIT_REPO, INJECT_FILES } = require('./constants');
+const { INJECT_FILES } = require('./constants');
 const chalk = require('chalk');
 const ora = require('ora');
 const path = require('path');
@@ -108,7 +108,7 @@ Project.prototype.generate = function() {
   const downloadSpinner = ora('正在下载模板，请稍等...');
   downloadSpinner.start();
   // 下载git repo
-  download(TEMPLATE_GIT_REPO, downloadPath, { clone: true }, (err) => {
+  download(GIT_TEMPLATE_REPO, downloadPath, { clone: true }, (err) => {
     if (err) {
       downloadSpinner.color = 'red';
       downloadSpinner.fail(err.message);
